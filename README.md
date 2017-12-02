@@ -2,16 +2,17 @@
 
 Repository containing various codes and notes related to Machine Learning, Statistics, Data Science, Deep Learning.
 
-## Current codes include:
+## Programs include:
 
 - Module for preprocessing data and creating Pandas dataframes from xml hierarchical data
 - Stemmed/Lemmatized Vectorizers (extension of sklearn's HashedVectorizer) suited for transforming sentences into their sparse bag of words representations
+- sklearn's compliant decision tree with top-down post prunning algorithm.
 - Gradient optimization algorithms (Gradient Descent, SGD, momentum, nesterov, adagrad, rmsprop, adam, adamax, nadam)
 - Solutions to AndrewNG's Machine Learning Coursera course in highly vectorized fashion
 - Jupyter notebook with gambler's game implementation
 - Jupyter notebooks with exercises regarding Natural Language Processing
 
-## Current mind map notes include (created via XMind):
+## Mind map notes include (created via XMind):
 
 - deeplearningbook (first 9 chapters)
 - Notes from AndrewNG's course (mentioned above) (in Polish)
@@ -22,4 +23,8 @@ Repository containing various codes and notes related to Machine Learning, Stati
   - seaborn
   - spaCy
   - nltk
+  
+## LaTeX exercises include:
+
+- information theory math assignments
  
