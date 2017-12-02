@@ -78,14 +78,18 @@ class DecisionTree:
         ])
 
     @staticmethod
-    def partition(dataset):
-        """partition. Partitions dataset based on values of attribute.
+    def partition_by_attribute(column):
+        """partition_by_attribute. Partitions dataset based on values of
+        attribute.
 
-        :param dataset: Dataset to partition
+        :param dataset: Dataset to partition_by_attribute
         :returns: Dictionary {class_value: elements}
 
         """
-        return {c: (dataset == c).nonzero()[0] for c in np.unique(dataset)}
+        return {
+            value: (column == value).nonzero()[0]
+            for value in np.unique(column)
+        }
 
     def _create_tree(self, X, y):
         """_create_tree.
@@ -97,14 +101,16 @@ class DecisionTree:
         labels, frequencies = np.unique(y, return_counts=True)
         if len(labels) == 1:
             return labels[0]
+        # FIND THE BEST ATTRIBUTE TO SPLIT ON USING MUTUAL INFORMATION
         gain = np.array(
             [self.mutual_information(y, x_column) for x_column in X.T])
         attribute = np.argmax(gain)
+        # FIND THE MOST FREQUENTLY OCCURING LABEL IN OUR DATASET/SUBSET
         most_frequent_label = max(
             dict(zip(labels, frequencies)).items(),
             key=operator.itemgetter(1))[0]
 
-        sets = self.partition(X[:, attribute])
+        sets = self.partition_by_attribute(X[:, attribute])
         subtree = {}
         for key, values in sets.items():
             x_subset = X.take(values, axis=0)
@@ -123,7 +129,6 @@ class DecisionTree:
 
         """
         self.tree = None
-        self.most_frequent = None
 
     def fit(self, X, y):
         """fit.
