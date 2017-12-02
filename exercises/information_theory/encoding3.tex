@@ -1,0 +1,375 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage{forest}
+\usepackage{mathtools}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+
+\usetikzlibrary{automata,positioning}
+\forestset{
+  circles/.style={
+    for tree={
+      math content,
+      circle,
+      draw,
+      text width=1em,
+      text centered,
+      edge=->,
+      s sep'+=5pt, % increase distance between siblings by 5pt
+      l sep'+=5pt, % increase distance between levels by 5pt
+    },
+    before typesetting nodes={
+      for tree={% make circles uniform in size
+        content/.wrap value=\strut ##1,
+        % split content of nodes into content and value for my label
+        split option={content}{:}{content,my label},
+      },
+    },
+  },
+  my label/.style={% put the label left or right, depending on which child and level we have
+    label/.process={On=On=|? {n'}{1} {level}{0} {45:$#1$}{135:$#1$}},
+  },
+}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ (\hmwkClassInstructor\ \hmwkClassTime): \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Assignment\ \#3}
+\newcommand{\hmwkDueDate}{February 12, 2014}
+\newcommand{\hmwkClass}{Information Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{Marek Smieja}
+\newcommand{\hmwkAuthorName}{\textbf{Szymon Maszke}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+  \maketitle
+
+  \pagebreak
+
+  \begin{homeworkProblem}
+    Prove that Shannon coding is prefix.\\\\
+    \solution\\
+
+    \proof A b c
+  \end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}
+  Let $A= \{0,1\}$ be the source alphabet and $P=\{0.1, 0.9\}$ it's probability
+  distribution.
+  \begin{itemize}
+    \item Find Huffman and Shannon codes for all pairs, triplets and
+      quadruplets of source alphabet.
+    \item Compare their estimated code lengths attributable on symbol with entropy
+      source
+    \item Consider distribution $Q = {0.4, 0.6}$ and repeat the task
+  \end{itemize}
+  \solution\\\\
+  \part\\
+
+  Let's calculate probabilties for each pair and triplet
+  \begin{itemize}
+    \item pairs: $[00,01,10,11]$ described by probability vector: $[0.01, 0.09,
+      0.09, 0.81]$.
+    \item triplets: $[000, 001, 010, 011, 100, 101, 110,111]$ described by
+      probability vector:\\ $[0.001, 0.009, 0.009, 0.081, 0.009, 0.081, 0.081,
+      0.72]$
+  \end{itemize}
+  \part\\
+
+  Sort symbols in decreasing order based on their probability, calculate
+  length of each code using the formula:
+  \begin{equation}
+  l_i = \left \lceil -\log_2(p_i) \rceil \right
+  \end{equation}
+  and calculate their cumulative probabilities using formula:
+  \begin{equation}
+    P_c = \sum_{i<k} p(i)
+  \end{equation}
+  \begin{itemize}
+    \item $[11,10,01,00]$ with $p_p = [0.81,0.09, 0.09, 0.01]$, $l_p =
+      [1,4,4,7]$ and $P_c_p = [0, 0.81, 0.90, 0.99]$
+    \item Analogous for triplets...
+  \end{itemize}
+  To receive the code we have to take first $l_k$ digits from cumulative
+  probability transformed to binary digits, so we receive:
+  \begin{itemize}
+    \item Binary cumulative probability: $P_c_p_b = [0.0, 0.1100, 0.1110,
+      0.1111111]$, which gives us the code: $[11:0, 10:1100, 01:1110,
+      00:1111111]$
+    \item Analogous for triplets...
+  \end{itemize}
+  Source entropy of pairs is given by:
+  \begin{equation}
+    \sum_{i}p_i \log_2 p_i \leq h(X) + 1
+  \end{equation}
+  Average code length for Shannon coding is given by:
+  \begin{equation}
+    \sum_{i}p_i \left \lceil \log_2 p_i \rceil \right \leq h(X) + 1
+  \end{equation}
+  , with the sum being equal to element-wise vector multiplication of $l_p$ and
+  $p_p$.\\
+  Applying above formulas for pairs gives us:
+  \begin{align}
+    0.81+2*0.36+0.07 < 0.81*0.246 + 2*0.312 + 0.066 + 1\\
+    1.6 < 0.88926 + 1
+  \end{align}
+  which is consistent with the approximation for average length of Shannon
+  coding.
+  \pagebreak
+
+  \part\\
+
+  \textbf{Introduction:}\\
+  Huffman coding is optimal based on average code length (in contrast to Shannon
+  coding). Based on binary trees with leaves representing symbols and and path
+  from the root to leaves their codes (respectively).\\
+
+  \solution\\
+
+  To create Huffman code we have to use recursive approach for binary tree
+  creation. Starting with two smallest probabilities and differentiating between
+  them only with one value, we climb up the probability 'ladder'. For each pair,
+  we sum their probability and apply it back to the list.\\
+
+  Our sorted probability list for pairs is: $p_p = [0.81,0.09, 0.09, 0.01]$ and
+  appropriate symbols are: $SYMBOLS = [11, 01, 10, 00]$.\\
+  We take two smallest values to create first binary tree.
+  It will be parametrized by probability and appropriate code (root will be
+  given code placeholder: *)
+
+  \begin{figure}[!h]
+  \centering
+  \begin{forest}
+    circles
+    [0.1:*
+    [.09:0]
+    [.01:1]
+    ]
+  \end{forest}
+  \end{figure}
+  Our current list consists of following probabilities: $p_p = [0.81,0.10,0.9]$ and
+  unified symbols:\\ $SYMBOLS = [11, *, 01]$, where $*$ is unified $00$ and $10$
+  \begin{figure}[!h]
+  \centering
+  \begin{forest}
+    circles
+    [.19:*
+      [.09:0]
+      [0.1:*
+      [.09:0]
+      [.01:1]
+      ]
+    ]
+  \end{forest}
+  \end{figure}
+
+  \pagebreak
+  Our current list consists of following probabilities: $p_p = [0.81,0.19]$ and
+  unified symbols:\\ $SYMBOLS = [11, *]$
+  \begin{figure}[!h]
+  \centering
+  \begin{forest}
+    circles
+    [1:*
+      [.19:*
+        [.09:0]
+        [0.1:*
+        [.09:0]
+        [.01:1]
+        ]
+      ]
+      [.81:1]
+    ]
+  \end{forest}
+  \end{figure}
+
+  Probability equal to one finishes the algorithm and we can code each symbol
+  (moving to the left applies zero, while moving to the right applies one):
+  \begin{equation}
+    [11,01,10,00] = [1,00,010,011]
+  \end{equation}
+  Based on the coding above $l_p = [1,2,3,3]$ and probabilities for each code is
+  respectively: $p_p = [0.81, 0.09,0.09,0.01]$, so average code length is:
+  \begin{align}
+    0.81+5*0.09++0.01*3 \leq h(X) + 1\\
+    1.29 \leq 0.88926 + 1
+  \end{align}
+  It should be noted, that average code length for Huffman coding is smaller
+  than the one found using Shannon coding with $1.29$ and $1.6$ respectively,
+  hence can be considered more optimal with respect to this attribute.
+
+  \LARGE FINISH OTHER EXAMPLES SOMEDAY...
+\end{homeworkProblem}
+\pagebreak
+
+\begin{homeworkProblem}
+  Code text `alabla' using arithmetic coding. Estimate probability distribution
+  from data.\\
+
+  \solution\\
+
+  \part
+
+  First we have to estimate probability distribution of a given string, as the
+  task is trivial I will only provide a dictionary containing it:
+  \begin{equation}
+    [a:0.5, l:0.(3), b:0.1(6)]
+  \end{equation}
+
+  \part\\
+
+  To code the string we have to use cumulative probability, e.g.:
+  \begin{equation}
+    \sum_{i<k} p_i = [0, 0.5, 0.83, 1]
+  \end{equation}
+  \begin{itemize}
+    \item We start by coding first letter `a' giving it $I_0 = [0,0.5]$
+    \item For letter l: $I_1 = 0 + 0.5 * [0.5, 0.83] = [0.25, 0.415]$
+    \item For letter a: $I_2 = 0.25 + 0.165 * [0, 0.5] = [0.25, 0.3325]$
+    \item For letter b: $I_3 = 0.25 + 0.08325 * [0.83, 1] = [0.3190975, 0.33325]$
+    \item For letter l: $I_4 = 0.3190975 + 0.0141525 * [0.5, 0.83] = [0.32617375, 0.330844075]$
+    \item For letter a: $I_5 = 0.3261737 + 0.004670325 * [0, 0.5] = [0.32617375, 0.3285088625]$
+  \end{itemize}
+  Result of this coding is the interval $[0.32617375, 0.3285088625]$, the marker
+  can be given by it's mean: $\textbf{z = 0.32734130625}$ and length of the word
+  $\textbf{n=6}$\\
+
+  \part
+
+  \LARGE Add decoding if you have time
+
+\end{homeworkProblem}
+\pagebreak
+
+% Non sequential homework problems
+%
+% Jump to problem 18
+\begin{homeworkProblem}[18]
+\end{homeworkProblem}
+
+% Continue counting to 19
+
+\end{document}

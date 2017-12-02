@@ -1,0 +1,476 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{forest}
+\usepackage{mathtools}
+\usepackage{enumerate}
+\usepackage{physics}
+\usepackage{amssymb}
+% \usetikzlibrary{graphs,graphdrawing,arrows.meta}
+% \usegdlibrary{trees}
+
+\usetikzlibrary{automata,positioning}
+\forestset{
+  circles/.style={
+    for tree={
+      math content,
+      circle,
+      draw,
+      text width=1em,
+      text centered,
+      edge=->,
+      s sep'+=5pt, % increase distance between siblings by 5pt
+      l sep'+=5pt, % increase distance between levels by 5pt
+    },
+    before typesetting nodes={
+      for tree={% make circles uniform in size
+        content/.wrap value=\strut ##1,
+        % split content of nodes into content and value for my label
+        split option={content}{:}{content,my label},
+      },
+    },
+  },
+  my label/.style={% put the label left or right, depending on which child and level we have
+    label/.process={On=On=|? {n'}{1} {level}{0} {45:$#1$}{135:$#1$}},
+  },
+}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ (\hmwkClassInstructor\ \hmwkClassTime): \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Assignment\ \#2}
+\newcommand{\hmwkDueDate}{February 12, 2014}
+\newcommand{\hmwkClass}{Information Theory}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{Marek Smieja}
+\newcommand{\hmwkAuthorName}{\textbf{Szymon Maszke}}
+
+%
+% Title Page
+%
+
+\title{
+    \vspace{2in}
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate\ at 3:10pm}\\
+    \vspace{0.1in}\large{\textit{\hmwkClassInstructor\ \hmwkClassTime}}
+    \vspace{3in}
+}
+
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+% Probability commands: Expectation, Variance, Covariance, Bias
+\newcommand{\E}{\mathrm{E}}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Bias}{\mathrm{Bias}}
+
+\begin{document}
+
+  \maketitle
+
+  \pagebreak
+
+\begin{homeworkProblem}
+  Give one example of encoding from each group mentioned in lectures:\\\\
+  \solution\\
+  \begin{itemize}
+    \item \textbf{Non non-singular encoding} (coding function, each symbol can be
+      encoded in any way [resulting codes can be equal]\\
+      \textbf{Example}:
+      \begin{align}
+        S = \{a,b,c,d\}, A=\{0\}, \phi: S \rightarrow A* \\
+        \phi(a) = 0\\
+        \phi(b) = 0\\
+        \phi(c) = 0\\
+        \phi(d) = 0
+      \end{align}
+    \item \textbf{Non-singular encoding} (injective coding function [resulting codes
+      for each symbol cannot be equal]), fulfilling the property:
+      \begin{align}
+        s_1 \neq s_2 \implies \phi(s_1) \neq \phi(s_2)
+      \end{align}
+      \textbf{Example}:
+      \begin{align}
+        S = \{a,b,c,d\}, A=\{0,1,2\}, \phi: S \rightarrow A* \\
+        \phi(a) = 0\\
+        \phi(b) = 1\\
+        \phi(c) = 10\\
+        \phi(d) = 2
+      \end{align}
+      \textbf{Codes do not have to be uniquely decodable!}
+    \item \textbf{Fixed length codes} (same number of bits used for each
+      encoding)\\
+      \textbf{Example} (no compression, uniquely decodable):
+      \begin{align}
+        S = \{a,b\}, A=\{0,1\}, \phi: S \rightarrow A* \\
+        \phi(a) = 1\\
+        \phi(b) = 0
+      \end{align}
+    \item \textbf{Uniquely decodable} (Code is uniquely decodable if there is
+      only one series able to produce it)\\
+      \textbf{Example}: above\\
+      \textbf{Definitions}: Code is uniquely decodable if it's extensions is
+      non-singular, namely:
+      \begin{align}
+        \phi(s_1,s_2,\ldots,s_k) := \phi(s_1)\phi(s_2)\ldots\phi(s_k)
+      \end{align}
+      \pagebreak
+    \item \textbf{Prefix codes} (None of the codes are the prefix of other
+      codes)\\
+      \begin{align}
+        S = \{a,b,c,d\}, A=\{0,1\}, \phi: S \rightarrow A* \\
+        \phi(a) = 00\\
+        \phi(b) = 10\\
+        \phi(a) = 11\\
+        \phi(b) = 01
+      \end{align}
+
+  \end{itemize}
+\end{homeworkProblem}
+
+\begin{homeworkProblem}
+  Assume $m$-element coding alphabet. We want uniquely decodable code with
+  lengths $l = (1,1,2,3,2,3)$. What is the minimum value of $m$ we can choose?
+  Find encoding for this length.\\\\
+  \solution\\\\
+  \part\\\\
+  To resolve this problem we have to use \textbf{Kraft's inequality} given by
+  following equation:
+  \begin{align}
+    \sum_{i=1}^{r}m^{-li} \leq 1
+  \end{align}
+  where:
+  \begin{itemize}
+    \item $r$ count of elements in coding alphabet A
+    \item $l_i$ length of each element in coding alphabet A
+    \item $m$ size of coding alphabet (and sought variable)
+  \end{itemize}
+
+  Substituting our example to above equation gives us:
+  \begin{align}
+    \frac{2}{m^2} + \frac{2}{m^3} + \frac{2}{m^4} \leq 1\\
+  \end{align}
+  Solving above unequality for m gives us $\textbf{m = 2.919}$. Size of the
+  coding alphabet can only take integer numbers, hence:
+  \begin{align}
+  m = \left \lceil{2.919}\right \rceil = 3
+  \end{align}
+  \pagebreak
+
+  \part\\\\
+To create prefix code with minimal size of coding alphabet, we have to draw tree
+and apply codes from the left side (starting with the shortest ones)
+
+\begin{figure}[!h]
+\centering
+\begin{forest}
+  circles
+  [:root
+  [x_1:0]
+  [x_2:1]
+  [:2
+    [x_3:0]
+    [x_4:1]
+    [:2
+      [x_5:0]
+      [x_6:1]
+    ]
+  ]
+  ]
+\end{forest}
+\end{figure}
+
+Obtained codes from the tree are given by the following vector:
+\begin{align}
+  \textbf{[0, 1, 20, 21, 220, 221]}
+\end{align}
+\end{homeworkProblem}
+
+\pagebreak
+
+% Non sequential homework problems
+%
+% Jump to problem 18
+\begin{homeworkProblem}[4]
+  Check continuity and differentiability of the function:
+  \begin{equation}
+    sh(x) =
+    \begin{cases*}
+      0 & if $x=0$ \\
+      -x log x & otherwise
+    \end{cases*}
+  \end{equation}
+  \solution\\\\
+  With the following function we have one point suspect od discontinuity, namely
+  $\textbf{0}$, so we have to check limes from left and right side. \\\\
+  \part
+
+  \begin{enumerate}
+    \item Transform $-x log x$ to $-\frac{log x}{x^{-1}}$ so we can use l'Hospital
+      rule
+    \item
+      \begin{equation}
+        \lim_{x \to 0} -\frac{log x}{x^{-1}}
+        \overset{H}{\underset{\left[\frac{0}{0}\right]}{=}} \lim_{x \to
+        0^+}\frac{x^{-1}}{x^{-2}} = \lim_{x \to
+      0^+}x^{-1}*x^{2} = \lim_{x \to 0^+} x = 0
+      \end{equation}
+    \item
+      \begin{equation}
+        \lim_{x \to 0} -\frac{log x}{x^{-1}}
+        \overset{H}{\underset{\left[\frac{0}{0}\right]}{=}} \lim_{x \to
+        0^-}\frac{x^{-1}}{x^{-2}} = \lim_{x \to
+      0^-}x^{-1}*x^{2} = \lim_{x \to 0^-} x = 0
+      \end{equation}
+    \item Left and right side limes is equal to zero and $sh(x)$ in zero is
+      equal to zero, therefore the function is continuous and differentiable
+  \end{enumerate}
+
+\end{homeworkProblem}
+\begin{homeworkProblem}
+  Find maximum of the function $sh(x) + sh(1-x)$ with $x \in [0,1]$ and draw
+  it.\\\\
+  \solution\\\\
+  First of all we need the derivative of $sh(x) + sh(1-x)$, which is:
+  \begin{equation}
+    \deriv{sh(x)} + \deriv{sh(1-x)} =
+    \begin{cases*}
+      0 & if $x=0$ \\
+      -x logx f''(x)-(log(x)+1)f'(x)+log(1-x)+1& otherwise
+    \end{cases*}
+  \end{equation}
+  Comparing derivative to zero gives us:
+  \begin{align*}
+    -x logx f''(x)-(log(x)+1)f'(x)+log(1-x)+1 = 0\\
+    x=\frac{1}{2} - \frac{\sqrt{e^2 - 4}}{2e}
+  \end{align*}
+  And nobody in their right mind will calculate all of it by hand.
+\end{homeworkProblem}
+\pagebreak
+
+\begin{homeworkProblem}
+  There is an event $X=x$ occuring with probability $p_x = P(X=x)$.
+  Let $I(p(x)) = -\log_2p(x)$ be the amount of information in event. \\
+  We play a game, where we choose one integer $(x)$ number in the range $[0,63]$.
+  Opponent has to guess foremenetioned integer asking questions with only two
+  possible answers (Yes or No).
+  \begin{itemize}
+    \item How many questions have to be asked to know the value of X?
+    What's the information contained in the answer for each of those questions?
+    What's the amount of information we get after asking all of the questions?
+    \item Assume opponent is asking questions "Whether this number is y?", where
+      y ia an integer we didn't ask for yet. We guessed the value of x after
+      asking n questions. What is the information contained in each of those answers?
+      Consider both positive and negative answers.
+    \item Calculate the information received after n questions
+  \end{itemize}
+  \solution\\\\
+  \part
+
+  We have to make following assumption to give meaningful answers:\\\\
+  \textbf{Assumption:} Choice of each integer in the range (0,63) is equally likely and
+  follows uniform distribution (maximum entropy)\\
+
+  For easier comprehension I will introduce two easy notations.
+  \begin{itemize}
+    \item Maximum amount of information will be given for the smallest
+      probability for random variable, e.g.
+      \begin{equation}
+        \lim_{p(i) \to 0^+} -\log_2p(i) = \infty
+      \end{equation}
+    \item Smallest amount of information is given by:
+      \begin{equation}
+        \lim_{p(i) \to \infty} -\log_2p(i) = 0
+      \end{equation}
+    \item Information about X is equal to it's entropy, e.g.:
+      \begin{equation}
+        I(X;X) = H(X)
+      \end{equation}
+  \end{itemize}
+
+  \part
+
+  Solutions to the problems:
+  \begin{itemize}
+    \item Possible answers (`Yes' or `No') follow Bernoulli distribution, hence
+      maximum entropy is given by $p(y) = \frac{1}{2}$, where y is our answer.
+      The only possibility for $p(y) = \frac{1}{2}$ is when both answers are
+      Which gives us $x=0$ and $y=0$
+      equally likely. With set consisting of 64 numbers we can divide it into
+      two parts with 32 elements each by asking question: `Is the number bigger
+      than $a$`, where $a$ is the center value of the set (in this case 31).
+      To certainly receive the answer for set with $n$ sorted values and
+      asking binary questions (which allow to divide the set) we have to ask:
+      \begin{equation}
+        \log_2(n)
+      \end{equation}
+      questions (\textbf{6 in this case}).\\
+      For those six questions we get a total information amount received equal
+      to six as well:
+      \begin{equation}
+        6* \log_2(\frac{1}{2}) = 6
+      \end{equation}
+      Which sums up to total count of questions we have to ask.
+      \pagebreak
+
+    \item If opponent guesses the answer right away, the amount of information
+      he receives is equal to:
+      \begin{equation}
+        - \log_2(\frac{1}{64}) = 6
+      \end{equation}
+      With each answer `No' amount of information received drops by
+      $\frac{\log(\frac{n-1}{n})}{\log(2)}$, where $n$ is the size of set for
+      current guess, and $n-1$ the size of set for the guess before.\\\\
+      Same situation applies to all negative guesses with sudden `Yes' followed
+      by it.
+
+    \item For information contained in guess after $n$ tries we can provide the generic formula:
+      \begin{equation}
+        - \log_2(\frac{1}{m-n})
+      \end{equation}
+      where $m$ is the count of set in the beginning,
+      given the answers are binary and integer's probability ($p(x)$) follows
+      the uniform distribution.
+  \end{itemize}
+
+\end{homeworkProblem}
+\begin{homeworkProblem}
+  Calculate extrema of $z = x+y$ on $x^2+y^2 = 1$\\\\
+  \solution
+  \begin{itemize}
+    \item Let's calculate partial derivatives of the function:
+      \begin{align}
+        \pdv{z}{x}(x+y) = 1\\
+        \pdv{z}{y}(x+y) = 1
+      \end{align}
+      which gives us statnioray point $P = (1,1)$ where the extremum might be
+      located.
+    \item Second order derivatives would return 0 and so would $det$ for the
+      matrix $W$ so this test is inconclusive
+    \item In this scenario we can pose it as optimization problem with Lagrangian:
+      \begin{align}
+        \mathcal{L}({x,y,\lambda}) = f(x,y) - \lambda  g(x,y)\\
+        \mathcal{L}(x,y,\lambda) = x+y - \lambda(x^2+y^2 - 1) = -\lambda x^2 -
+        \lambda y^2 + x + y -\lambda
+      \end{align}
+    \item Now we have to calculate partial derivatives with respect to each of
+      the parameters:
+      \begin{align}
+        \pdv{\mathcal{L}}{x} = -2 x \lambda +1\\
+        \pdv{\mathcal{L}}{y} = -2 y \lambda +1\\
+        \pdv{\mathcal{L}}{\lambda} = -x^2 -y^2 - 1
+      \end{align}
+    \item Creating system of equations with each equal to zero gives us those
+      values:
+      \begin{align}
+        x = - \frac{i}{\sqrt{2}} \land y = -\frac{i}{\sqrt{2}}\\
+        \lor \\
+        x = \frac{i}{\sqrt{2}} \land y = \frac{i}{\sqrt{2}}
+      \end{align}
+  \end{itemize}
+\end{homeworkProblem}
+
+% Continue counting to 19
+
+\end{document}
