@@ -5,18 +5,38 @@
 This module allows you to:
 1. Split datasets
 2. Convert Pandas string column values to their discrete numerical counterparts
+3. Get dataset; if file is not present it is downloaded from url
 
 """
 
+import pathlib
+
 import pandas as pd
 
-# from decision_tree import DecisionTree, accuracy_score
+__all__ = ['split_data', 'convert_to_numerical', 'get_dataset']
 
-__all__ = ['split_data', 'convert_to_numerical']
+
+def get_dataset(dataset_path, dataset_url):
+    """Retrieve dataset from file or url
+
+    :param dataset_path: Path to fataset
+    :param dataset_url: URL to dataset (downloaded if dataset_path does not
+    exist)
+    :returns: pandas DataFrame containing data
+    """
+    file_handle = pathlib.Path(dataset_path)
+    if file_handle.is_file():
+        try:
+            return pd.read_csv(dataset_path, sep=',', header=None)
+        except OSError:
+            raise
+    else:
+        return pd.read_csv(dataset_url, sep=',', header=None)
 
 
 def split_data(df, training=5, validation=1, testing=1, inplace=False):
-    """split_data.
+    """Splits dataset into training, validation and testing w.r.t. given
+    proportions.
 
     :param df: Pandas dataframe to split into training, testing and validation
     :param training: Proportion of testing dataset
@@ -42,25 +62,21 @@ def split_data(df, training=5, validation=1, testing=1, inplace=False):
 
 
 def convert_to_numerical(df, columns, inplace=False):
-    """convert_to_numerical.
-
-    Converts values to their numerical categorical counterparts.
-
-    Enumeration of objects starts from 1 (easier digestion by sparse matrices
-    of pandas or scipy).
+    """Converts values to their numerical categorical counterparts.
 
     :param df: unified pandas Dataframe object
     :param columns: df column's to be transformed
     :param inplace: perform transformation in-place or return dataframe
     (default behaviour, value=False)
+    :returns: Dataset with converted values and their respective codes as
+    dictionary (tuple)
 
     """
     dataframe = pd.DataFrame(df) if inplace else df
     codes = {}
     for column in columns:
         dataframe[column] = pd.Categorical(dataframe[column])
-        codes[column] = dict(
-            enumerate(dataframe[column].cat.categories), start=1)
+        codes[column] = dict(enumerate(dataframe[column].cat.categories))
         # WORKAROUND IF YOU WANT TO WORK WITH SPARSE MATRICES AFTERWARDS
-        dataframe[column] = dataframe[column].cat.codes + 1
+        dataframe[column] = dataframe[column].cat.codes
     return dataframe, codes
