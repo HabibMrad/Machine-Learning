@@ -9,6 +9,7 @@ Repository containing various codes and notes related to Machine Learning, Stati
 - sklearn's compliant decision tree with top-down post prunning algorithm (n-ary split, discrete values).
 - RandomForest classifier (binary decision trees, discrete values)
 - Gradient optimization algorithms (Gradient Descent, SGD, momentum, nesterov, adagrad, rmsprop, adam, adamax, nadam)
+- Gradient boosting algorithm using adam optimizer
 - Solutions to AndrewNG's Machine Learning Coursera course in highly vectorized fashion
 - Jupyter notebook with gambler's game implementation and other statistics related exercises
 - Jupyter notebooks with exercises regarding Natural Language Processing
