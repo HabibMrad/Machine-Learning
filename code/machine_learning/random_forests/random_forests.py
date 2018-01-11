@@ -58,7 +58,7 @@ class RandomForest:
         elif self.number_of_features is not int:
             self.number_of_features = self.number_of_features(X.shape[1])
 
-        with multiprocessing.pool.Pool(self.number_of_jobs) as pool:
+        with multiprocessing.Pool(self.number_of_jobs) as pool:
             async_trees = []
             for _ in range(self.number_of_estimators):
                 indices = np.random.randint(

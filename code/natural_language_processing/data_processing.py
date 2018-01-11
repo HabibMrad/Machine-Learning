@@ -157,10 +157,8 @@ def convert_to_numerical(df, columns, inplace=False):
     codes = {}
     for column in columns:
         dataframe[column] = pd.Categorical(dataframe[column])
-        codes[column] = dict(
-            enumerate(dataframe[column].cat.categories, start=1))
-        # WORKAROUND IF YOU WANT TO WORK WITH SPARSE MATRICES AFTERWARDS
-        dataframe[column] = dataframe[column].cat.codes + 1
+        codes[column] = dict(enumerate(dataframe[column].cat.categories))
+        dataframe[column] = dataframe[column].cat.codes
     return dataframe, codes
 
 
